@@ -2,9 +2,20 @@ import HistoryCard from '@/components/dashboard/HistoryCard';
 import PlayQuizCard from '@/components/dashboard/PlayQuizCard';
 import RecentActivityCard from '@/components/dashboard/RecentActivityCard';
 import Navbar from '@/components/Navbar';
+import { prisma } from '@/lib/db';
+import { auth } from '@/lib/nextauth';
 import React from 'react';
 
 export default async function Dashboard() {
+  const session = await auth();
+
+  const user = await prisma.user.findUnique({
+    where: { id: session?.user.id },
+    include: {
+      games: true,
+    },
+  });
+
   return (
     <div className="relative w-full">
       <Navbar />
@@ -14,7 +25,7 @@ export default async function Dashboard() {
           <HistoryCard />
         </div>
         <div className="w-full h-full">
-          <RecentActivityCard />
+          <RecentActivityCard games={user?.games} />
         </div>
       </div>
     </div>

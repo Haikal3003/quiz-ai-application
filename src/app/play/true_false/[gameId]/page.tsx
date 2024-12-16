@@ -28,12 +28,8 @@ export default async function page({ params }: any) {
     },
   });
 
-  if (!game) {
-    return redirect('/404');
-  }
-
   return (
-    <div>
+    <div className="w-full h-screen flex justify-center items-center ">
       <Game game={game} />
     </div>
   );

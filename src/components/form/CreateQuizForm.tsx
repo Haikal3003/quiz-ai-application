@@ -14,14 +14,12 @@ import { BorderBeam } from '../ui/border-beam';
 import { createQuizSchema } from '@/schemas/createQuizSchema';
 import { useRouter } from 'next/navigation';
 import { FormInput } from 'lucide-react';
-import LoadingQuestions from '../LoadingQuestions';
 
 type FormInput = z.infer<typeof createQuizSchema>;
 
 export default function CreateQuizForm() {
   const router = useRouter();
   const [finishedLoading, setFinishedLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const form = useForm<FormInput>({
     resolver: zodResolver(createQuizSchema),
@@ -34,17 +32,8 @@ export default function CreateQuizForm() {
 
   const onSubmit = async (data: FormInput) => {
     setFinishedLoading(true);
-    setProgress(0);
     try {
-      const response = await axios.post('/api/game', data, {
-        onUploadProgress: (progressEvent) => {
-          const total = progressEvent.total || 1;
-          const current = progressEvent.loaded;
-          const newProgress = Math.round((current / total) * 100);
-
-          setProgress(newProgress);
-        },
-      });
+      const response = await axios.post('/api/game', data);
       const gameId = response.data.gameId;
 
       console.log(response.data);
@@ -60,10 +49,6 @@ export default function CreateQuizForm() {
       setFinishedLoading(false);
     }
   };
-
-  if (finishedLoading) {
-    return <LoadingQuestions progress={progress} />;
-  }
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -130,8 +115,8 @@ export default function CreateQuizForm() {
               )}
             />
 
-            <Button type="submit" className="w-full text-xs">
-              Generate
+            <Button type="submit" className={`w-full text-xs`} disabled={finishedLoading ? true : false}>
+              {finishedLoading ? 'wait...' : 'Generate'}
             </Button>
           </form>
         </Form>
