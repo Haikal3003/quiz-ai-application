@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 export default function Game({ game }: any) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState<number>(0);
   const [selectedOptions, setSelectedOptions] = React.useState<(string | null)[]>(() => Array(game.questions.length).fill(null));
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const router = useRouter();
 
