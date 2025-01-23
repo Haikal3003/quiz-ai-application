@@ -4,19 +4,13 @@ import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-interface PageProps {
-  params: {
-    gameId: string;
-  };
-}
-
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: { gameId: string } }) {
   const session = await auth();
   if (!session?.user) {
     return redirect('/');
   }
 
-  const { gameId } = params; // Extract gameId directly from params
+  const { gameId } = params;
 
   // Fetch game data from Prisma
   const game = await prisma.game.findUnique({
