@@ -4,20 +4,14 @@ import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-interface PageProps {
-  params: {
-    gameId: string;
-  };
-}
+export default async function page({ params }: { params: Promise<{ gameId: string }> }) {
+  const gameId = (await params).gameId;
 
-export default async function page({ params }: PageProps) {
   const session = await auth();
 
   if (!session?.user) {
     return redirect('/');
   }
-
-  const { gameId } = params;
 
   const game = await prisma.game.findUnique({
     where: {
