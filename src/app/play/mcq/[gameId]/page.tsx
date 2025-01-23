@@ -1,3 +1,5 @@
+'use client'; // Add this line to mark the component as client-side
+
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { prisma } from '@/lib/db';
