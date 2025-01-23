@@ -14,7 +14,7 @@ function RecentActivityCard({ games }: GamesProps) {
       </CardHeader>
       <CardContent className="space-y-4 divide-y divide-gray-200">
         <div>
-          {sortedGames.map((quiz: any, idx: number) => {
+          {sortedGames.map((quiz, idx) => {
             return (
               <div key={idx} className="flex justify-between items-center py-4">
                 <div>

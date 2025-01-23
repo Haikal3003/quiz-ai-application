@@ -36,7 +36,7 @@ export default function HistoryPageCard({ games }: GamesProps) {
     <div className="py-10">
       <h1 className="text-center text-xl font-semibold mb-5">History</h1>
       <div className="grid grid-cols-4 gap-4">
-        {sortedGames.map((quiz: any, idx: number) => {
+        {sortedGames.map((quiz, idx: number) => {
           return (
             <Card key={idx} className="relative p-4">
               <div>

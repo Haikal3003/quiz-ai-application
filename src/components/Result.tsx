@@ -16,12 +16,11 @@ export default function Result({ game }: GameResultProps) {
   const totalQuestions = game.questions.length;
 
   const [showQuestions, setShowQuestions] = React.useState(false);
+  const router = useRouter();
 
   const toggleQuestions = () => {
     setShowQuestions((prevState) => !prevState);
   };
-
-  const router = useRouter();
 
   return (
     <div className="w-auto min-h-screen flex flex-col justify-center items-center py-10">
@@ -47,7 +46,7 @@ export default function Result({ game }: GameResultProps) {
       {showQuestions && (
         <div className="space-y-4 mt-8 w-full max-w-lg">
           {game.questions.map((question, index) => {
-            let options: string[] = question.options;
+            const options = question.options;
 
             return (
               <Card key={question.id} className="p-4 relative overflow-hidden">
