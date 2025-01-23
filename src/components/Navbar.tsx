@@ -2,7 +2,6 @@ import { auth } from '@/lib/nextauth';
 import React from 'react';
 import UserAccountMenu from './UserAccountMenu';
 import { ModeToggle } from './ModeToggle';
-import Link from 'next/link';
 
 export default async function Navbar() {
   const session = await auth();

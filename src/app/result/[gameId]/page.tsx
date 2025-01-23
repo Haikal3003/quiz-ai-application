@@ -4,14 +4,19 @@ import { auth } from '@/lib/nextauth';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-export default async function ResultPage({ params }: any) {
+interface PageProps {
+  params: {
+    gameId: string;
+  };
+}
+export default async function ResultPage({ params }: PageProps) {
   const session = await auth();
 
   if (!session?.user) {
     return redirect('/');
   }
 
-  const { gameId } = await params;
+  const { gameId } = params;
 
   const game = await prisma.game.findUnique({
     where: { id: gameId },
@@ -21,8 +26,18 @@ export default async function ResultPage({ params }: any) {
   });
 
   if (!game) {
-    return <div className="text-center text-red-500">Game not found</div>;
+    return <div>Game not found</div>;
   }
 
-  return <Result game={game} />;
+  const formattedGame = {
+    ...game,
+    questions: game.questions.map((q) => ({
+      ...q,
+      options: Array.isArray(q.options) ? q.options : JSON.parse((q.options as string) || '[]'),
+      isCorrect: q.isCorrect ?? false,
+      userAnswer: q.userAnswer ?? '',
+    })),
+  };
+
+  return <Result game={formattedGame} />;
 }

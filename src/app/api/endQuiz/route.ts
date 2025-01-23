@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       gameId: game.id,
     });
   } catch (error) {
+    console.error(error); // Log the error for debugging
     return NextResponse.json(
       {
         message: 'Something went wrong',

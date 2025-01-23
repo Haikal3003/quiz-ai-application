@@ -25,7 +25,7 @@ export default async function Dashboard() {
           <HistoryCard />
         </div>
         <div className="w-full h-full">
-          <RecentActivityCard games={user?.games} />
+          <RecentActivityCard games={user?.games ?? []} />
         </div>
       </div>
     </div>

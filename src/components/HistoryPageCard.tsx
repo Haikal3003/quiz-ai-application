@@ -4,8 +4,9 @@ import { Card } from './ui/card';
 import { Dot } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { GamesProps } from '@/types/types';
 
-export default function HistoryPageCard({ games }: any) {
+export default function HistoryPageCard({ games }: GamesProps) {
   const [showDropdownMenu, setShowDropdownMenu] = React.useState<string | null>(null);
 
   const sortedGames = [...games].sort((a, b) => new Date(b.timeStarted).getTime() - new Date(a.timeStarted).getTime());

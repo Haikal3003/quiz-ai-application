@@ -4,6 +4,12 @@ import { createQuizSchema } from '@/schemas/createQuizSchema';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
+interface Question {
+  question: string;
+  answer: string;
+  options: string[];
+}
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
@@ -44,7 +50,7 @@ export async function POST(req: Request) {
       amount,
     });
 
-    const manyData = response.data.questions.map((question: any) => {
+    const manyData = response.data.questions.map((question: Question) => {
       const options = [...question.options].sort(() => Math.random() - 0.5);
 
       return {
@@ -61,8 +67,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ gameId: game.id }, { status: 200 });
-  } catch (error: any) {
-    if (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
       console.error('Validation Error:', error.message);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
@@ -86,8 +92,8 @@ export async function DELETE(req: NextRequest) {
     });
 
     return NextResponse.json({ message: 'Delete game successfully!' }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error }, { status: 400 });
+    return NextResponse.json({ error: 'Error deleting the game' }, { status: 400 });
   }
 }

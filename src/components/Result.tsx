@@ -5,13 +5,14 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React from 'react';
 import CircleResult from './CircleResult';
 import { useRouter } from 'next/navigation';
+import { GameResultProps } from '@/types/types';
 
-export default function Result({ game }: any) {
+export default function Result({ game }: GameResultProps) {
   if (!game) {
     return <div className="text-center text-red-500">Game not found</div>;
   }
 
-  const totalCorrect = game.questions.filter((q: any) => q.isCorrect).length;
+  const totalCorrect = game.questions.filter((q) => q.isCorrect).length;
   const totalQuestions = game.questions.length;
 
   const [showQuestions, setShowQuestions] = React.useState(false);
@@ -34,14 +35,10 @@ export default function Result({ game }: any) {
           <div>
             <CircleResult score={totalCorrect} total={totalQuestions} />
           </div>
-          <div className=" flex justify-between items-center">
-            <Button className="" onClick={toggleQuestions}>
-              {showQuestions ? 'Hide' : 'View'}
-            </Button>
+          <div className="flex justify-between items-center">
+            <Button onClick={toggleQuestions}>{showQuestions ? 'Hide' : 'View'}</Button>
 
-            <Button className="" onClick={() => router.push('/dashboard')}>
-              Back
-            </Button>
+            <Button onClick={() => router.push('/dashboard')}>Back</Button>
           </div>
         </CardContent>
         <BorderBeam />
@@ -49,13 +46,8 @@ export default function Result({ game }: any) {
 
       {showQuestions && (
         <div className="space-y-4 mt-8 w-full max-w-lg">
-          {game.questions.map((question: any, index: number) => {
-            let options: string[] = [];
-            try {
-              options = typeof question.options === 'string' ? JSON.parse(question.options) : [];
-            } catch (error) {
-              console.error('Failed to parse options:', error);
-            }
+          {game.questions.map((question, index) => {
+            let options: string[] = question.options;
 
             return (
               <Card key={question.id} className="p-4 relative overflow-hidden">

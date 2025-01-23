@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { BorderBeam } from '../ui/border-beam';
+import { GamesProps } from '@/types/types';
 
-function RecentActivityCard({ games }: any) {
+function RecentActivityCard({ games }: GamesProps) {
   const sortedGames = [...games].sort((a, b) => new Date(b.timeStarted).getTime() - new Date(a.timeStarted).getTime());
 
   return (

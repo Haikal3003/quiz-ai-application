@@ -3,8 +3,6 @@ import './globals.css';
 import React from 'react';
 import { Poppins } from 'next/font/google';
 import { DotPattern } from '@/components/ui/dot-pattern';
-import Navbar from '@/components/Navbar';
-import { auth } from '@/lib/nextauth';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -23,8 +21,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased relative w-full min-h-screen`}>

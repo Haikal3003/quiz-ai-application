@@ -43,8 +43,12 @@ export default function CreateQuizForm() {
       } else {
         router.push(`/play/true_false/${gameId}`);
       }
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      } else {
+        console.log('An unknown error occurred');
+      }
     } finally {
       setFinishedLoading(false);
     }
@@ -53,7 +57,7 @@ export default function CreateQuizForm() {
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <Card className="relative overflow-hidden max-w-4xl w-full">
-        <CardHeader className="flex flex-col justify-center items-center ">
+        <CardHeader className="flex flex-col justify-center items-center">
           <CardTitle className="text-sm">Generate AI-Powered Quiz</CardTitle>
           <CardDescription className="text-xs">Challenge yourself with quizzes crafted by AI</CardDescription>
         </CardHeader>

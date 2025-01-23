@@ -4,13 +4,20 @@ import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-export default async function page({ params }: any) {
+interface PageProps {
+  params: {
+    gameId: string;
+  };
+}
+
+export default async function page({ params }: PageProps) {
   const session = await auth();
+
   if (!session?.user) {
     return redirect('/');
   }
 
-  const { gameId } = await params;
+  const { gameId } = params;
 
   const game = await prisma.game.findUnique({
     where: {
@@ -28,9 +35,21 @@ export default async function page({ params }: any) {
     },
   });
 
+  if (!game) {
+    return <div>Game not found</div>;
+  }
+
+  const formattedGame = {
+    ...game,
+    questions: game.questions.map((q) => ({
+      ...q,
+      options: Array.isArray(q.options) ? q.options : JSON.parse((q.options as string) || '[]'),
+    })),
+  };
+
   return (
     <div className="w-full h-screen flex justify-center items-center ">
-      <Game game={game} />
+      <Game game={formattedGame} />
     </div>
   );
 }

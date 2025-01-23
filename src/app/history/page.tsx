@@ -18,5 +18,5 @@ export default async function page() {
     },
   });
 
-  return <HistoryPageCard games={user?.games} />;
+  return <HistoryPageCard games={user?.games ?? []} />;
 }
