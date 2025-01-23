@@ -3,14 +3,20 @@ import React from 'react';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
+import { useParams } from 'next/navigation';
 
-export default async function Page({ params }: { params: { gameId: string } }) {
+export default async function Page() {
+  // Using useParams to retrieve dynamic route params
+  const { gameId } = useParams<{ gameId: string }>();
+
   const session = await auth();
   if (!session?.user) {
     return redirect('/');
   }
 
-  const { gameId } = params;
+  if (!gameId) {
+    return <div>Game not found</div>;
+  }
 
   // Fetch game data from Prisma
   const game = await prisma.game.findUnique({
