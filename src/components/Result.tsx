@@ -2,21 +2,21 @@
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import React from 'react';
+import React, { useState } from 'react';
 import CircleResult from './CircleResult';
 import { useRouter } from 'next/navigation';
 import { GameResultProps } from '@/types/types';
 
 export default function Result({ game }: GameResultProps) {
+  const [showQuestions, setShowQuestions] = useState(false);
+  const router = useRouter();
+
   if (!game) {
     return <div className="text-center text-red-500">Game not found</div>;
   }
 
   const totalCorrect = game.questions.filter((q) => q.isCorrect).length;
   const totalQuestions = game.questions.length;
-
-  const [showQuestions, setShowQuestions] = React.useState(false);
-  const router = useRouter();
 
   const toggleQuestions = () => {
     setShowQuestions((prevState) => !prevState);
