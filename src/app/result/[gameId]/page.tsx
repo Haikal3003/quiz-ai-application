@@ -4,19 +4,13 @@ import { auth } from '@/lib/nextauth';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-interface PageProps {
-  params: {
-    gameId: string;
-  };
-}
-export default async function ResultPage({ params }: PageProps) {
+export default async function ResultPage({ params }: { params: Promise<{ gameId: string }> }) {
   const session = await auth();
+  const gameId = (await params).gameId;
 
   if (!session?.user) {
     return redirect('/');
   }
-
-  const { gameId } = params;
 
   const game = await prisma.game.findUnique({
     where: { id: gameId },
