@@ -10,14 +10,15 @@ interface PageProps {
   };
 }
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const session = await auth();
   if (!session?.user) {
     return redirect('/');
   }
 
-  const { gameId } = params;
+  const { gameId } = params; // Extract gameId directly from params
 
+  // Fetch game data from Prisma
   const game = await prisma.game.findUnique({
     where: {
       id: gameId,
