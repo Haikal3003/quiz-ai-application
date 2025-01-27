@@ -11,7 +11,6 @@ import { ModeToggle } from '@/components/ModeToggle';
 export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Triggering the Google sign-in flow
     await signIn('google', { callbackUrl: '/dashboard' });
   };
 
