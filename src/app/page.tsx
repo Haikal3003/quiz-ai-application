@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,9 +9,10 @@ import { BorderBeam } from '@/components/ui/border-beam';
 import { ModeToggle } from '@/components/ModeToggle';
 
 export default function Home() {
-  const handleSubmit = async () => {
-    'use server';
-    await signIn('google', { redirectTo: '/dashboard' });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Triggering the Google sign-in flow
+    await signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (
@@ -20,8 +23,8 @@ export default function Home() {
           <CardDescription className="text-sm">Signin to your google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button type="submit" className="text-xs">
-            Signin with google <FcGoogle />
+          <Button type="submit" className="text-xs flex items-center gap-2">
+            Sign in with Google <FcGoogle />
           </Button>
           <div className="absolute top-4 right-4">
             <ModeToggle />
