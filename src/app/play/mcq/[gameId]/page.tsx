@@ -1,28 +1,24 @@
+'use client'; // Add this line to mark the component as client-side
+
 import { redirect } from 'next/navigation';
+import React from 'react';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-export default function Page({ gameData }: { gameData: any }) {
-  if (!gameData) {
-    return <div>Game not found</div>;
-  }
-
-  return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <Game game={gameData} />
-    </div>
-  );
-}
-
-export async function getServerSideProps({ params }: { params: { gameId: string } }) {
-  const gameId = params.gameId;
+export default async function Page({ params }: { params: Promise<{ gameId: string }> }) {
+  const gameId = (await params).gameId;
 
   const session = await auth();
   if (!session?.user) {
     return redirect('/');
   }
 
+  if (!gameId) {
+    return <div>Game not found</div>;
+  }
+
+  // Fetch game data from Prisma
   const game = await prisma.game.findUnique({
     where: {
       id: gameId,
@@ -40,7 +36,7 @@ export async function getServerSideProps({ params }: { params: { gameId: string 
   });
 
   if (!game) {
-    return { props: { gameData: null } };
+    return <div>Game not found</div>;
   }
 
   const formattedGame = {
@@ -51,9 +47,9 @@ export async function getServerSideProps({ params }: { params: { gameId: string 
     })),
   };
 
-  return {
-    props: {
-      gameData: formattedGame,
-    },
-  };
+  return (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Game game={formattedGame} />
+    </div>
+  );
 }
