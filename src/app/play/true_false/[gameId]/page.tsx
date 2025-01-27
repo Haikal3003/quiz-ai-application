@@ -1,14 +1,24 @@
 import { redirect } from 'next/navigation';
-import React from 'react';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-export default async function page({ params }: { params: Promise<{ gameId: string }> }) {
-  const gameId = (await params).gameId;
+export default function Page({ gameData }: { gameData: any }) {
+  if (!gameData) {
+    return <div>Game not found</div>;
+  }
+
+  return (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Game game={gameData} />
+    </div>
+  );
+}
+
+export async function getServerSideProps({ params }: { params: { gameId: string } }) {
+  const gameId = params.gameId;
 
   const session = await auth();
-
   if (!session?.user) {
     return redirect('/');
   }
@@ -30,7 +40,7 @@ export default async function page({ params }: { params: Promise<{ gameId: strin
   });
 
   if (!game) {
-    return <div>Game not found</div>;
+    return { props: { gameData: null } };
   }
 
   const formattedGame = {
@@ -41,9 +51,9 @@ export default async function page({ params }: { params: Promise<{ gameId: strin
     })),
   };
 
-  return (
-    <div className="w-full h-screen flex justify-center items-center ">
-      <Game game={formattedGame} />
-    </div>
-  );
+  return {
+    props: {
+      gameData: formattedGame,
+    },
+  };
 }
