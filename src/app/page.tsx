@@ -4,15 +4,18 @@ import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FcGoogle } from 'react-icons/fc';
-import { signIn } from 'next-auth/react';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { ModeToggle } from '@/components/ModeToggle';
+import { SignIn } from '@/lib/auth-action';
 
 export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (typeof window !== 'undefined') {
-      await signIn('google', { callbackUrl: '/dashboard' });
+
+    try {
+      await SignIn();
+    } catch (error) {
+      console.error('Sign in failed', error);
     }
   };
 
