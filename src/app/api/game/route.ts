@@ -29,11 +29,12 @@ export async function POST(req: Request) {
       },
     });
 
-    await prisma.topicCount.upsert({
+    await prisma.topic_count.upsert({
       where: {
         topic,
       },
       create: {
+        id: crypto.randomUUID(),
         topic,
         count: 1,
       },
