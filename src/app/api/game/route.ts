@@ -9,8 +9,7 @@ interface Question {
   answer: string;
   options: string[];
 }
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user) {
@@ -45,11 +44,16 @@ export async function POST(req: Request) {
       },
     });
 
+    // Cek apakah API eksternal bisa diakses
     const response = await axios.post(`${process.env.NEXT_API_URL}/api/questions`, {
       topic,
       type,
       amount,
     });
+
+    if (!response?.data?.questions) {
+      return NextResponse.json({ error: 'No questions found from external API' }, { status: 400 });
+    }
 
     const manyData = response.data.questions.map((question: Question) => {
       const options = [...question.options].sort(() => Math.random() - 0.5);
@@ -76,25 +80,5 @@ export async function POST(req: Request) {
 
     console.error('Unexpected Error:', error);
     return NextResponse.json({ error: 'An unexpected error occurred.' }, { status: 500 });
-  }
-}
-
-export async function DELETE(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
-  const id = searchParams.get('id');
-
-  if (!id) {
-    return new Response('ID parameter is missing', { status: 400 });
-  }
-
-  try {
-    await prisma.game.delete({
-      where: { id: id },
-    });
-
-    return NextResponse.json({ message: 'Delete game successfully!' }, { status: 200 });
-  } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json({ error: 'Error deleting the game' }, { status: 400 });
   }
 }

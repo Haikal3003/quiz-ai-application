@@ -13,7 +13,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { BorderBeam } from '../ui/border-beam';
 import { createQuizSchema } from '@/schemas/createQuizSchema';
 import { useRouter } from 'next/navigation';
-import { FormInput } from 'lucide-react';
 
 type FormInput = z.infer<typeof createQuizSchema>;
 
