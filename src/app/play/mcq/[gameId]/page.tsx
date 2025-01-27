@@ -1,4 +1,4 @@
-'use client'; // Add this line to mark the component as client-side
+'use client';
 
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -6,8 +6,8 @@ import { prisma } from '@/lib/db';
 import { auth } from '@/lib/nextauth';
 import Game from '@/components/GameCard';
 
-export default async function Page({ params }: { params: Promise<{ gameId: string }> }) {
-  const gameId = (await params).gameId;
+export default async function Page({ params }: { params: { gameId: string } }) {
+  const gameId = await params.gameId;
 
   const session = await auth();
   if (!session?.user) {
